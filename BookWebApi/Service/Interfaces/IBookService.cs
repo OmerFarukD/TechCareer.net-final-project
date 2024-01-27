@@ -1,23 +1,24 @@
 ﻿using BookWebApi.Models.Dtos.RequestDto;
 using BookWebApi.Models.Dtos.ResponseDto;
 using BookWebApi.Models.Entities;
+using BookWebApi.ReturnModels;
 
 namespace BookWebApi.Service.Interfaces;
 
 public interface IBookService
 {
-    List<Book> GetAll();
-    Book GetById(int id);
-    void Update(BookUpdateRequestDto dto);
-    void Add(BookAddRequestDto dto);
-    void Delete(int id);
+    ReturnModel<List<Book>> GetAll();
+    ReturnModel<Book> GetById(int id);
+    ReturnModel<NoData> Update(BookUpdateRequestDto dto);
+    ReturnModel<NoData> Add(BookAddRequestDto dto);
+    ReturnModel<NoData> Delete(int id);
 
-    List<BookResponseDto> GetAllDetails();
-    BookResponseDto GetDetailsById(int id);
-    List<BookResponseDto> GetByCategoryId(int categoryId);
-    List<BookResponseDto> GetByAuthorId(int AuthorId);
-    List<BookResponseDto> GetByPriceRangeDetails(double min,double max);
-    List<BookResponseDto> GetByTitleContains(string title);
+   ReturnModel<List<BookResponseDto>> GetAllDetails();
+   ReturnModel<BookResponseDto> GetDetailsById(int id);
+   ReturnModel<List<BookResponseDto>> GetByCategoryId(int categoryId);
+   ReturnModel<List<BookResponseDto>> GetByAuthorId(int AuthorId);
+   ReturnModel<List<BookResponseDto>> GetByPriceRangeDetails(double min,double max);
+   ReturnModel<List<BookResponseDto>> GetByTitleContains(string title);
 
 
 

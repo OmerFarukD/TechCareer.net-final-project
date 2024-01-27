@@ -1,6 +1,7 @@
-﻿using BookWebApi.Models.Dtos.RequestDto;
+﻿using Azure;
+using BookWebApi.Models.Dtos.RequestDto;
 using BookWebApi.Models.Dtos.ResponseDto;
-using BookWebApi.Models.Entities;
+using BookWebApi.ReturnModels;
 using BookWebApi.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +10,17 @@ namespace BookWebApi.Controller;
 // silme : HttpDelete , HttpPost
 // ekleme : HttpPost
 // güncelleme : HttpPatch, HttpPost, HttpPut
+
+
+// Data
+// Success
+// Message
+// StatusCode
+
+
 [Route("api/[controller]")]
 [ApiController]
-public class BookController : ControllerBase
+public class BookController : BaseController
 {
     private readonly IBookService _service;
 
@@ -23,104 +32,84 @@ public class BookController : ControllerBase
     [HttpGet("getall")]
     public IActionResult GetAll()
     {
-        List<Book> books = _service.GetAll();
-        return Ok(books);
+
+        var responses = _service.GetAll();
+
+        return ResponseForStatusCode(responses);
 
     }
 
+    // 20.18 de dersteyiz
     [HttpGet("getbyid")]
     public IActionResult GetById([FromQuery] int id)
     {
-        try
-        {
-            Book book = _service.GetById(id);
-            return Ok(book);
-        }catch (Exception ex)
-        {
-            return NotFound(ex.Message);
-        }
-
-
+ 
+        var response = _service.GetById(id);
+        return ResponseForStatusCode(response);
     }
 
     [HttpPut("update")]
     public IActionResult Update([FromBody]BookUpdateRequestDto dto) 
-    {
-        try
-        {
-            _service.Update(dto);
-            return Ok("Güncelleme başarılı");
-        }catch(Exception ex)
-        {
-            return NotFound(ex.Message);
-        }
- 
-
+    { 
+        var response = _service.Update(dto);
+        return ResponseForStatusCode(response);
     }
 
     [HttpPost("add")]
     public IActionResult Add([FromBody] BookAddRequestDto dto)
     {
-        _service.Add(dto);
-        return Ok("Ekleme başarılı.");
+        var response = _service.Add(dto);
+        return ResponseForStatusCode(response);
     }
 
     [HttpDelete("delete")]
     public IActionResult Delete([FromQuery] int id)
     {
-        try
-        {
-            _service.Delete(id);
-            return Ok("Silme başarılı.");
-        }catch (Exception ex)
-        {
-            return NotFound(ex.Message);
-        }
-
-
+        var response = _service.Delete(id);
+        return ResponseForStatusCode(response);
     }
 
     [HttpGet("getalldetails")]
     public IActionResult GetAllDetails()
     {
-        List<BookResponseDto> result = _service.GetAllDetails();
-        return Ok(result);
+       var result = _service.GetAllDetails();
+        return ResponseForStatusCode(result);
     }
 
     [HttpGet("getdetailsbyid")]
     public IActionResult GetDetailsById([FromQuery] int id)
     {
-        BookResponseDto result = _service.GetDetailsById(id);
-        return Ok(result);
+        ReturnModel<BookResponseDto> result = _service.GetDetailsById(id);
+        return ResponseForStatusCode(result);
     }
 
     [HttpGet("getbycategoryid")]
     public IActionResult GetByCategoryId([FromQuery] int categoryId)
     {
-        List<BookResponseDto> result = _service.GetByCategoryId(categoryId); 
-        return Ok(result);
+        var result = _service.GetByCategoryId(categoryId);
+        return ResponseForStatusCode(result);
     }
 
     [HttpGet("getbyauthorid")]
     public IActionResult GetByAuthorId([FromQuery] int AuthorId)
     {
-        List<BookResponseDto> result = _service.GetByAuthorId(AuthorId);
-        return Ok(result);
+        var result = _service.GetByAuthorId(AuthorId);
+        return ResponseForStatusCode(result);
     }
 
     [HttpGet("getbypricerange")]
     public IActionResult GetByPriceRangeDetails([FromQuery]double min, [FromQuery]double max)
     {
-        List<BookResponseDto> result= _service.GetByPriceRangeDetails(min,max);
-        return Ok(result);
+        var result= _service.GetByPriceRangeDetails(min,max);
+        return ResponseForStatusCode(result);
 
     }
 
     [HttpGet("getbytitlecontains")]
     public IActionResult GetByTitleContains([FromQuery] string title)
     {
-        List<BookResponseDto> result = _service.GetByTitleContains(title);
-        return Ok(result);
+        var result = _service.GetByTitleContains(title);
+        return ResponseForStatusCode(result);
     }
 
 
